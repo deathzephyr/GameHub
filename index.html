@@ -32,7 +32,7 @@
             --color-reddit: #FF4500;
             --color-amazon: #FF9900;
 
-            /* Cores das Categorias */
+            /* Cores das Categorias (Usadas nos Orbs e Cards) */
             --color-acao: #ef4444;      /* Vermelho */
             --color-fps: #ec4899;        /* Rosa */
             --color-corrida: #f97316;    /* Laranja */
@@ -55,12 +55,23 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND --- */
+        /* --- BACKGROUND CONNECTED --- */
         .ambient-light {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
+            z-index: -2;
             overflow: hidden;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(15,15,20,0) 0%, var(--bg-dark) 100%);
+        }
+
+        /* Textura sutil para conectar visualmente */
+        .ambient-light::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.4;
             pointer-events: none;
         }
 
@@ -70,8 +81,10 @@
             filter: blur(90px);
             opacity: 0.4;
             animation: floatOrb 25s infinite alternate ease-in-out;
+            mix-blend-mode: screen;
         }
 
+        /* Orbs conectados às variáveis de cor do tema */
         .orb-1 { width: 500px; height: 500px; background: var(--color-acao); top: -150px; left: -150px; animation-duration: 30s; }
         .orb-2 { width: 600px; height: 600px; background: var(--color-fps); bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
         .orb-3 { width: 350px; height: 350px; background: var(--accent-cyan); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.25; animation: pulseOrb 12s infinite ease-in-out; }
@@ -576,7 +589,7 @@
             
             <div class="header-controls">
                 
-                <!-- NOVO BOTÃO HOME -->
+                <!-- BOTÃO HOME (Conectado ao Portal Principal) -->
                 <a href="https://deathzephyr.github.io/PortaisLDX/" class="header-btn" title="Portal Principal" target="_self">
                     <i class="fa-solid fa-house"></i>
                 </a>
@@ -1075,4 +1088,3 @@
     </script>
 </body>
 </html>
-

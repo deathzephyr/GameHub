@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- DESIGN SYSTEM --- */
+        /* --- DESIGN SYSTEM ORIGINAL GAMEHUB --- */
         :root {
             --bg-dark: #050507;
             --glass-bg: rgba(20, 20, 25, 0.6); 
@@ -32,13 +32,13 @@
             --color-reddit: #FF4500;
             --color-amazon: #FF9900;
 
-            /* Cores das Categorias (Usadas nos Orbs e Cards) */
-            --color-acao: #ef4444;      /* Vermelho */
-            --color-fps: #ec4899;        /* Rosa */
-            --color-corrida: #f97316;    /* Laranja */
-            --color-luta: #06b6d4;       /* Ciano */
-            --color-retro: #eab308;      /* Amarelo */
-            --color-esportes: #22c55e;   /* Verde */
+            /* Cores das Categorias */
+            --color-acao: #ef4444;      
+            --color-fps: #ec4899;        
+            --color-corrida: #f97316;    
+            --color-luta: #06b6d4;       
+            --color-retro: #eab308;      
+            --color-esportes: #22c55e;   
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -55,23 +55,35 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND CONNECTED --- */
+        /* --- BACKGROUND LAYER SYSTEM (CONEXÃO COM PORTAL LDX) --- */
+        #custom-bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh; 
+            z-index: -2;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        /* Se tiver fundo customizado, esconde as orbs padrão do GameHub */
+        body.has-custom-bg .ambient-light {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.has-custom-bg #custom-bg-layer {
+            opacity: 1;
+        }
+
+        /* --- BACKGROUND ORIGINAL GAMEHUB --- */
         .ambient-light {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2;
+            z-index: -1;
             overflow: hidden;
-            pointer-events: none;
-            background: radial-gradient(circle at 50% 50%, rgba(15,15,20,0) 0%, var(--bg-dark) 100%);
-        }
-
-        /* Textura sutil para conectar visualmente */
-        .ambient-light::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            opacity: 0.4;
             pointer-events: none;
         }
 
@@ -81,10 +93,9 @@
             filter: blur(90px);
             opacity: 0.4;
             animation: floatOrb 25s infinite alternate ease-in-out;
-            mix-blend-mode: screen;
         }
 
-        /* Orbs conectados às variáveis de cor do tema */
+        /* Cores originais do GameHub para as orbs */
         .orb-1 { width: 500px; height: 500px; background: var(--color-acao); top: -150px; left: -150px; animation-duration: 30s; }
         .orb-2 { width: 600px; height: 600px; background: var(--color-fps); bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
         .orb-3 { width: 350px; height: 350px; background: var(--accent-cyan); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.25; animation: pulseOrb 12s infinite ease-in-out; }
@@ -96,12 +107,15 @@
 
         /* --- HEADER --- */
         header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
+        
+        /* Logo Original GameHub */
         .logo { font-size:1.6rem; font-weight: 700; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 12px; text-shadow: 0 0 30px rgba(255,255,255,0.1); }
         
         .header-controls { display: flex; align-items: center; gap: 12px; }
 
         .header-btn-wrapper { position: relative; flex-shrink: 0; }
         
+        /* Botão Original GameHub (Sem brilhos extras) */
         .header-btn {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.1);
@@ -153,7 +167,6 @@
             white-space: nowrap;
         }
         
-        /* Cores Filtros */
         #catDropdown .dropdown-option[data-cat-filter="acao"] { color: var(--color-acao); }
         #catDropdown .dropdown-option[data-cat-filter="fps"] { color: var(--color-fps); }
         #catDropdown .dropdown-option[data-cat-filter="corrida"] { color: var(--color-corrida); }
@@ -173,6 +186,7 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Hero Original GameHub */
         .hero h1 { 
             font-size: 3.8rem; font-weight: 700; line-height: 1.05; margin-bottom: 1rem;
             background: linear-gradient(90deg, #ef4444, #ec4899, #06b6d4, #22c55e, #3b82f6);
@@ -376,7 +390,6 @@
         .section-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; display: flex; align-items: center; gap: 10px; }
         .section-line { height: 1px; width: 100%; background: linear-gradient(to right, rgba(255,255,255,0.2), transparent); }
 
-        /* Cores dos Headers */
         .header-acao .section-title { color: var(--color-acao); } .header-acao .section-line { background: linear-gradient(to right, var(--color-acao), transparent); }
         .header-fps .section-title { color: var(--color-fps); } .header-fps .section-line { background: linear-gradient(to right, var(--color-fps), transparent); }
         .header-corrida .section-title { color: var(--color-corrida); } .header-corrida .section-line { background: linear-gradient(to right, var(--color-corrida), transparent); }
@@ -414,7 +427,6 @@
         .card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
         .card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255,255,0.4); }
         
-        /* Animação de Clique */
         .card.clicked {
             transform: scale(0.95);
             opacity: 0.8;
@@ -474,7 +486,6 @@
         .card-icon .fa-solid { font-family: "Font Awesome 6 Free"; font-weight: 900; }
         .card-icon .fa-brands { font-family: "Font Awesome 6 Brands"; font-weight: 400; }
 
-        /* Ajustes Específicos */
         .card-icon .fa-user-secret { font-size: 1.25rem !important; transform: scale(1.05); } 
         .card-icon .fa-graduation-cap { font-size: 1.3rem !important; transform: scale(1.1); } 
         .card-icon .fa-city { font-size: 1.3rem !important; transform: scale(1.1); } 
@@ -507,7 +518,6 @@
         .card:hover h3 { transform: translateY(-1px); }
         .card p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; font-weight: 500; }
 
-        /* Cores dos Cards (Hover) */
         .card[data-cat="acao"] .card-icon { color: var(--color-acao); text-shadow: 0 0 15px rgba(239,68,68,0.2); }
         .card[data-cat="acao"]:hover { box-shadow: 0 20px 40px -10px rgba(239,68,68,0.3), 0 0 0 1px rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); }
 
@@ -566,7 +576,6 @@
             .dropdown-option[data-cols="3"] { display: none; }
         }
 
-        /* 5 Colunas (Compact) */
         .bento-grid.cols-5 { gap: 8px; }
         .bento-grid.cols-5 .card { height: 110px; padding: 8px; }
         .bento-grid.cols-5 .card-icon { width: 26px; height: 26px; font-size: 0.75rem; margin-bottom: 4px; padding: 0; }
@@ -577,6 +586,10 @@
 </head>
 <body>
 
+    <!-- CAMADA DE FUNDO PERSONALIZADO (SÓ LEITURA DO PORTAL) -->
+    <div id="custom-bg-layer"></div>
+
+    <!-- FUNDO AMBIENTE ORIGINAL GAMEHUB -->
     <div class="ambient-light">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -589,7 +602,7 @@
             
             <div class="header-controls">
                 
-                <!-- BOTÃO HOME (Conectado ao Portal Principal) -->
+                <!-- BOTÃO HOME -->
                 <a href="https://deathzephyr.github.io/PortaisLDX/" class="header-btn" title="Portal Principal" target="_self">
                     <i class="fa-solid fa-house"></i>
                 </a>
@@ -792,6 +805,19 @@
     </div>
 
     <script>
+        /* --- CONEXÃO DE FUNDO (APENAS LEITURA DO PORTAL LDX) --- */
+        // Lemos as chaves que o Portal LDX usa
+        const savedBg = localStorage.getItem('ldx_custom_bg');
+        const savedType = localStorage.getItem('ldx_bg_type');
+        const customBgLayer = document.getElementById('custom-bg-layer');
+
+        if (savedBg && savedType === 'image') {
+            // Se houver fundo salvo no Portal, aplicamos aqui
+            customBgLayer.style.backgroundImage = `url('${savedBg}')`;
+            document.body.classList.add('has-custom-bg');
+        }
+        // Se não houver, o GameHub exibe seu .ambient-light original (orbs)
+
         /* --- PESQUISA & FILTRO --- */
         const engines = {
             google: { name: 'Google', url: 'https://www.google.com/search?q=', icon: 'fa-brands fa-google icon-google' },
@@ -810,7 +836,6 @@
         const searchHistory = document.getElementById('searchHistory');
         const historyList = document.getElementById('historyList');
 
-        /* --- LÓGICA DE FILTRAGEM --- */
         const cards = document.querySelectorAll('.card');
         const headers = document.querySelectorAll('.section-header');
 
@@ -1057,10 +1082,8 @@
                 if(e.button === 0) {
                     e.preventDefault();
 
-                    // 1. Efeito de "Pressionar" (Shrink)
                     this.classList.add('clicked');
 
-                    // 2. Efeito Ripple
                     const ripple = document.createElement('span');
                     ripple.classList.add('ripple');
                     const rect = card.getBoundingClientRect();
@@ -1073,7 +1096,6 @@
                     card.appendChild(ripple);
                     setTimeout(() => { ripple.remove(); }, 600);
 
-                    // 3. Delay para abrir o link
                     const href = this.getAttribute('href');
                     const target = this.getAttribute('target');
                     setTimeout(() => {

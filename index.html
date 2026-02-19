@@ -55,11 +55,32 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND LAYER SYSTEM (CONEXÃO COM PORTAL LDX) --- */
+        /* --- BACKGROUND SYSTEM (VIDEO + PORTAL LDX) --- */
+        
+        /* 1. Camada do Vídeo (Padrão GameHub) */
+        #bg-video {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            object-fit: cover;
+            z-index: -3;
+            opacity: 0; /* Começa invisível para fade in via JS ou CSS */
+            transition: opacity 1.5s ease;
+        }
+
+        /* Overlay para escurecer o vídeo e manter contraste */
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background: rgba(5, 5, 7, 0.75); /* Escurece 75% */
+            z-index: -2;
+            backdrop-filter: blur(3px); /* Leve blur no video para destacar o foreground */
+        }
+
+        /* 2. Camada de Fundo Personalizado (Conexão Portal LDX) */
         #custom-bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh; 
-            z-index: -2;
+            z-index: -1;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -68,23 +89,24 @@
             pointer-events: none;
         }
 
-        /* Se tiver fundo customizado, esconde as orbs padrão do GameHub */
-        body.has-custom-bg .ambient-light {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
+        /* Lógica de Troca de Fundo */
+        body.has-custom-bg #bg-video { opacity: 0; pointer-events: none; }
+        body.has-custom-bg .bg-overlay { opacity: 0; pointer-events: none; }
+        body.has-custom-bg #custom-bg-layer { opacity: 1; }
+        
+        /* Se não tiver custom bg, mostra o vídeo */
+        body:not(.has-custom-bg) #bg-video { opacity: 1; }
 
-        body.has-custom-bg #custom-bg-layer {
-            opacity: 1;
-        }
-
-        /* --- BACKGROUND ORIGINAL GAMEHUB --- */
+        /* --- BACKGROUND ORIGINAL GAMEHUB (ORBS) --- */
+        /* Escondemos as orbs originais para priorizar o vídeo, mas elas existem no código */
         .ambient-light {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             overflow: hidden;
             pointer-events: none;
+            opacity: 0; /* Desativado para dar foco ao vídeo */
+            transition: opacity 0.5s ease;
         }
 
         .orb {
@@ -115,7 +137,7 @@
 
         .header-btn-wrapper { position: relative; flex-shrink: 0; }
         
-        /* Botão Original GameHub (Sem brilhos extras) */
+        /* Botão Original GameHub */
         .header-btn {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.1);
@@ -154,9 +176,7 @@
         .dropdown-option {
             padding: 10px 14px;
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             color: var(--text-muted);
             text-decoration: none;
             transition: 0.2s;
@@ -230,9 +250,7 @@
             border-radius: 22px;
             height: 48px;
             padding: 0 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             color: var(--text-main);
             cursor: pointer;
             transition: all 0.2s;
@@ -274,9 +292,7 @@
         .engine-option {
             padding: 10px 14px;
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             color: var(--text-muted);
             text-decoration: none;
             transition: 0.2s;
@@ -486,6 +502,7 @@
         .card-icon .fa-solid { font-family: "Font Awesome 6 Free"; font-weight: 900; }
         .card-icon .fa-brands { font-family: "Font Awesome 6 Brands"; font-weight: 400; }
 
+        /* Ajuste de Ícones Específicos */
         .card-icon .fa-user-secret { font-size: 1.25rem !important; transform: scale(1.05); } 
         .card-icon .fa-graduation-cap { font-size: 1.3rem !important; transform: scale(1.1); } 
         .card-icon .fa-city { font-size: 1.3rem !important; transform: scale(1.1); } 
@@ -518,6 +535,7 @@
         .card:hover h3 { transform: translateY(-1px); }
         .card p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; font-weight: 500; }
 
+        /* Cores de Hover por Categoria */
         .card[data-cat="acao"] .card-icon { color: var(--color-acao); text-shadow: 0 0 15px rgba(239,68,68,0.2); }
         .card[data-cat="acao"]:hover { box-shadow: 0 20px 40px -10px rgba(239,68,68,0.3), 0 0 0 1px rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); }
 
@@ -586,10 +604,19 @@
 </head>
 <body>
 
-    <!-- CAMADA DE FUNDO PERSONALIZADO (SÓ LEITURA DO PORTAL) -->
+    <!-- 1. VÍDEO DE FUNDO (TEMA PRINCIPAL) -->
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="video1.mp4" type="video/mp4">
+        Seu navegador não suporta vídeos HTML5.
+    </video>
+    
+    <!-- Overlay para garantir contraste -->
+    <div class="bg-overlay"></div>
+
+    <!-- 2. CAMADA DE FUNDO PERSONALIZADO (SÓ LEITURA DO PORTAL) -->
     <div id="custom-bg-layer"></div>
 
-    <!-- FUNDO AMBIENTE ORIGINAL GAMEHUB -->
+    <!-- 3. AMBIENTE ORIGINAL GAMEHUB (ORBS - FICAM ATRÁS DO VIDEO/OVERLAY) -->
     <div class="ambient-light">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -805,18 +832,28 @@
     </div>
 
     <script>
-        /* --- CONEXÃO DE FUNDO (APENAS LEITURA DO PORTAL LDX) --- */
-        // Lemos as chaves que o Portal LDX usa
+        /* --- CONEXÃO DE FUNDO (PORTAL LDX VS VÍDEO PADRÃO) --- */
         const savedBg = localStorage.getItem('ldx_custom_bg');
         const savedType = localStorage.getItem('ldx_bg_type');
         const customBgLayer = document.getElementById('custom-bg-layer');
+        const bgVideo = document.getElementById('bg-video');
 
         if (savedBg && savedType === 'image') {
-            // Se houver fundo salvo no Portal, aplicamos aqui
+            // Se o Portal LDX definiu um fundo customizado:
+            // 1. Esconde o vídeo
+            // 2. Mostra a imagem customizada
             customBgLayer.style.backgroundImage = `url('${savedBg}')`;
             document.body.classList.add('has-custom-bg');
+        } else {
+            // Caso contrário, usa o vídeo padrão
+            // Tenta iniciar o vídeo (browsers exigem interação as vezes, mas autoplay muted funciona na maioria)
+            document.body.classList.remove('has-custom-bg');
+            bgVideo.play().catch(error => {
+                console.log("Autoplay bloqueado pelo navegador até interação:", error);
+                // Fallback visual caso o vídeo não carre
+                document.body.style.backgroundColor = "#050507";
+            });
         }
-        // Se não houver, o GameHub exibe seu .ambient-light original (orbs)
 
         /* --- PESQUISA & FILTRO --- */
         const engines = {

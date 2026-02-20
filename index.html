@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- DESIGN SYSTEM ORIGINAL GAMEHUB --- */
+        /* --- DESIGN SYSTEM GAMEHUB --- */
         :root {
             --bg-dark: #050507;
             --glass-bg: rgba(20, 20, 25, 0.6); 
@@ -55,29 +55,9 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND SYSTEM (VIDEO + PORTAL LDX) --- */
+        /* --- BACKGROUND SYSTEM (APENAS IMAGEM SINCRONIZADA) --- */
         
-        /* 1. Camada do Vídeo (Padrão GameHub) */
-        #bg-video {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100vh;
-            object-fit: cover;
-            z-index: -3;
-            opacity: 0; /* Começa invisível para fade in via JS ou CSS */
-            transition: opacity 1.5s ease;
-        }
-
-        /* Overlay para escurecer o vídeo e manter contraste */
-        .bg-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100vh;
-            /* CORREÇÃO: Reduzi a opacidade de 0.75 para 0.1 para o vídeo aparecer "normal" */
-            background: rgba(0, 0, 0, 0.1); 
-            z-index: -2;
-            backdrop-filter: blur(0px); /* Removido o blur para máxima nitidez do vídeo */
-        }
-
-        /* 2. Camada de Fundo Personalizado (Conexão Portal LDX) */
+        /* Única Camada de Fundo (Padrão img2.jpeg ou Customizado) */
         #custom-bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh; 
@@ -85,60 +65,24 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            /* FUNDO PADRÃO: img2.jpeg */
+            background-image: url('img2.jpeg');
+            opacity: 1;
+            transition: background-image 0.5s ease, opacity 0.5s ease;
             pointer-events: none;
         }
-
-        /* Lógica de Troca de Fundo */
-        body.has-custom-bg #bg-video { opacity: 0; pointer-events: none; }
-        body.has-custom-bg .bg-overlay { opacity: 0; pointer-events: none; }
-        body.has-custom-bg #custom-bg-layer { opacity: 1; }
-        
-        /* Se não tiver custom bg, mostra o vídeo */
-        body:not(.has-custom-bg) #bg-video { opacity: 1; }
-
-        /* --- BACKGROUND ORIGINAL GAMEHUB (ORBS) --- */
-        /* Escondemos as orbs originais para priorizar o vídeo, mas elas existem no código */
-        .ambient-light {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-            opacity: 0; /* Desativado para dar foco ao vídeo */
-            transition: opacity 0.5s ease;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.4;
-            animation: floatOrb 25s infinite alternate ease-in-out;
-        }
-
-        /* Cores originais do GameHub para as orbs */
-        .orb-1 { width: 500px; height: 500px; background: var(--color-acao); top: -150px; left: -150px; animation-duration: 30s; }
-        .orb-2 { width: 600px; height: 600px; background: var(--color-fps); bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
-        .orb-3 { width: 350px; height: 350px; background: var(--accent-cyan); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.25; animation: pulseOrb 12s infinite ease-in-out; }
-
-        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 90px) scale(1.1); } }
-        @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.35; transform: translate(-50%, -50%) scale(1.1); } }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; }
 
         /* --- HEADER --- */
         header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
         
-        /* Logo Original GameHub */
         .logo { font-size:1.6rem; font-weight: 700; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 12px; text-shadow: 0 0 30px rgba(255,255,255,0.1); }
         
         .header-controls { display: flex; align-items: center; gap: 12px; }
 
         .header-btn-wrapper { position: relative; flex-shrink: 0; }
         
-        /* Botão Original GameHub */
         .header-btn {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.1);
@@ -207,7 +151,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Hero Original GameHub */
         .hero h1 { 
             font-size: 3.8rem; font-weight: 700; line-height: 1.05; margin-bottom: 1rem;
             background: linear-gradient(90deg, #ef4444, #ec4899, #06b6d4, #22c55e, #3b82f6);
@@ -414,7 +357,7 @@
         .header-retro .section-title { color: var(--color-retro); } .header-retro .section-line { background: linear-gradient(to right, var(--color-retro), transparent); }
         .header-esportes .section-title { color: var(--color-esportes); } .header-esportes .section-line { background: linear-gradient(to right, var(--color-esportes), transparent); }
 
-        /* --- CARDS --- */
+        /* --- CARDS (PADRÃO) --- */
         .card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -443,6 +386,33 @@
         }
         .card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
         .card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255,255,0.4); }
+
+        /* --- ESTILOS SINCRONIZADOS (TRANSPARENT E INVISIBLE) --- */
+        body.transparent-mode .card {
+            background: rgba(0, 0, 0, 0.25); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+        }
+        body.transparent-mode .card:hover {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        body.invisible-mode .card {
+            background: transparent;
+            backdrop-filter: none; 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            box-shadow: none;
+        }
+        body.invisible-mode .card:hover {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5); 
+        }
+        body.invisible-mode .card h3, 
+        body.invisible-mode .card p {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
         
         .card.clicked {
             transform: scale(0.95);
@@ -605,24 +575,8 @@
 </head>
 <body>
 
-    <!-- 1. VÍDEO DE FUNDO (TEMA PRINCIPAL) -->
-    <video id="bg-video" autoplay muted loop playsinline>
-        <source src="video1.mp4" type="video/mp4">
-        Seu navegador não suporta vídeos HTML5.
-    </video>
-    
-    <!-- Overlay para garantir contraste (REDUZIDO PARA 0.1) -->
-    <div class="bg-overlay"></div>
-
-    <!-- 2. CAMADA DE FUNDO PERSONALIZADO (SÓ LEITURA DO PORTAL) -->
+    <!-- FUNDO PADRÃO (img2.jpeg) E CAMADA DE CUSTOMIZAÇÃO -->
     <div id="custom-bg-layer"></div>
-
-    <!-- 3. AMBIENTE ORIGINAL GAMEHUB (ORBS - FICAM ATRÁS DO VIDEO/OVERLAY) -->
-    <div class="ambient-light">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
 
     <div class="container">
         <header>
@@ -833,27 +787,27 @@
     </div>
 
     <script>
-        /* --- CONEXÃO DE FUNDO (PORTAL LDX VS VÍDEO PADRÃO) --- */
-        const savedBg = localStorage.getItem('ldx_custom_bg');
-        const savedType = localStorage.getItem('ldx_bg_type');
-        const customBgLayer = document.getElementById('custom-bg-layer');
-        const bgVideo = document.getElementById('bg-video');
+        /* --- SINCRONIZAÇÃO COM PORTAL LDX --- */
+        function initSyncedSettings() {
+            const bgLayer = document.getElementById('custom-bg-layer');
+            
+            // 1. Sincronizar Fundo
+            const savedBg = localStorage.getItem('ldx_custom_bg');
+            if (savedBg) {
+                bgLayer.style.backgroundImage = `url('${savedBg}')`;
+            } else {
+                // Se não tiver customizado, usa o padrão (já definido no CSS, mas garante aqui)
+                bgLayer.style.backgroundImage = `url('img2.jpeg')`;
+            }
+            bgLayer.style.opacity = '1'; 
 
-        if (savedBg && savedType === 'image') {
-            // Se o Portal LDX definiu um fundo customizado:
-            // 1. Esconde o vídeo
-            // 2. Mostra a imagem customizada
-            customBgLayer.style.backgroundImage = `url('${savedBg}')`;
-            document.body.classList.add('has-custom-bg');
-        } else {
-            // Caso contrário, usa o vídeo padrão
-            // Tenta iniciar o vídeo (browsers exigem interação as vezes, mas autoplay muted funciona na maioria)
-            document.body.classList.remove('has-custom-bg');
-            bgVideo.play().catch(error => {
-                console.log("Autoplay bloqueado pelo navegador até interação:", error);
-                // Fallback visual caso o vídeo não carre
-                document.body.style.backgroundColor = "#050507";
-            });
+            // 2. Sincronizar Estilo dos Cards
+            const savedStyle = localStorage.getItem('ldx_card_style');
+            if (savedStyle === 'transparent') {
+                document.body.classList.add('transparent-mode');
+            } else if (savedStyle === 'invisible') {
+                document.body.classList.add('invisible-mode');
+            }
         }
 
         /* --- PESQUISA & FILTRO --- */
@@ -1145,6 +1099,9 @@
                 }
             });
         });
+        
+        // Inicializa Sincronização
+        document.addEventListener('DOMContentLoaded', initSyncedSettings);
     </script>
 </body>
 </html>
